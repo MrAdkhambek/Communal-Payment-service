@@ -1,0 +1,39 @@
+spring:
+    application:
+        name: communal-service
+    datasource:
+        url: jdbc:postgresql://localhost:5432/communal
+        driver-class-name: org.postgresql.Driver
+        username: adkhambek
+        password: 12345
+    jpa:
+        show-sql: true
+        database: postgresql
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        open-in-view: false
+        generate-ddl: true
+        hibernate:
+            ddl-auto: update
+
+server:
+    port: 8080
+
+
+permission:
+    roles:
+        -   name: ADMIN
+        -   name: USER
+    access:
+        -   url: /api/v1/communal/**
+            permit:
+                -   method: GET
+                    roles:
+                        - ADMIN
+                        - USER
+
+        -   url: /api/v1/category/**
+            permit:
+                -   method: GET
+                    roles:
+                        - ADMIN
+                        - USER
