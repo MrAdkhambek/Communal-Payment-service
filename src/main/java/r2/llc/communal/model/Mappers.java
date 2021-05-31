@@ -3,18 +3,15 @@ package r2.llc.communal.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import r2.llc.communal.model.data.Category;
-import r2.llc.communal.model.data.Communal;
-import r2.llc.communal.model.data.EntityMapper;
-import r2.llc.communal.model.data.UserModel;
-import r2.llc.communal.model.entity.CategoryEntity;
-import r2.llc.communal.model.entity.CommunalEntity;
-import r2.llc.communal.model.entity.UserEntity;
+import r2.llc.communal.model.data.*;
+import r2.llc.communal.model.entity.*;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 @Component
 public class Mappers {
@@ -61,6 +58,7 @@ public class Mappers {
             }
         };
     }
+
 
     @Bean
     public EntityMapper<Communal, CommunalEntity> communalMapper() {
@@ -124,6 +122,80 @@ public class Mappers {
                 entity.setUpdatedAt(from.getUpdatedAt());
                 return entity;
             }
+        };
+    }
+
+    @Bean
+    public EntityMapper<RegionModel, RegionEntity> regionMapper() {
+        return new EntityMapper<>() {
+            @Override
+            public RegionModel mapRT(RegionEntity from) {
+                return RegionModel
+                        .builder()
+                        .id(from.getId())
+                        .titleUz(from.getTitleUz())
+                        .titleRu(from.getTitleRu())
+                        .titleEn(from.getTitleEn())
+                        .districts(from.getDistricts())
+                        .createdAt(from.getCreatedAt())
+                        .updatedAt(from.getUpdatedAt())
+                        .build();
+            }
+
+            @Override
+            public RegionEntity mapTR(RegionModel from) {
+                RegionEntity entity = new RegionEntity();
+                entity.setId(from.getId());
+                entity.setTitleUz(from.getTitleUz());
+                entity.setTitleRu(from.getTitleRu());
+                entity.setTitleEn(from.getTitleEn());
+                entity.setDistricts(from.getDistricts());
+                entity.setCreatedAt(from.getCreatedAt());
+                entity.setUpdatedAt(from.getUpdatedAt());
+                return entity;
+            }
+        };
+    }
+
+    @Bean
+    public EntityMapper<DistrictModel, DistrictEntity> districtMapper() {
+        return new EntityMapper<>() {
+            @Override
+            public DistrictModel mapRT(DistrictEntity from) {
+                return DistrictModel
+                        .builder()
+                        .id(from.getId())
+                        .titleUz(from.getTitleUz())
+                        .titleRu(from.getTitleRu())
+                        .titleEn(from.getTitleEn())
+                        .createdAt(from.getCreatedAt())
+                        .updatedAt(from.getUpdatedAt())
+                        .build();
+            }
+
+            @Override
+            public DistrictEntity mapTR(DistrictModel from) {
+                DistrictEntity entity = new DistrictEntity();
+                entity.setId(from.getId());
+                entity.setTitleUz(from.getTitleUz());
+                entity.setTitleRu(from.getTitleRu());
+                entity.setTitleEn(from.getTitleEn());
+                entity.setCreatedAt(from.getCreatedAt());
+                entity.setUpdatedAt(from.getUpdatedAt());
+                return entity;
+            }
+        };
+    }
+
+    @Bean
+    public SingleMapper<RegModel, UserEntity> regMapper(PasswordEncoder passwordEncoder) {
+        return value -> {
+            UserEntity entity = new UserEntity();
+            entity.setRole("USER");
+            entity.setName(value.getName());
+            entity.setPhoto(value.getPhoto());
+            entity.setPassword(passwordEncoder.encode(value.getPassword()));
+            return entity;
         };
     }
 }

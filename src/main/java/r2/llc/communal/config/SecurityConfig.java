@@ -5,24 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import r2.llc.communal.config.security.CustomSecurityConfigurer;
 import r2.llc.communal.config.security.CustomSecurityProvider;
 import r2.llc.communal.config.security.SecurityAccessDeniedHandler;
 import r2.llc.communal.config.security.SecurityAuthenticationEntryPoint;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.stream.Collectors;
 
 
 @Configuration
@@ -31,10 +25,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public static final String[] OPEN_APIs = {
+            "/actuator",
+            "/actuator/*",
+            "/api/v1/user/auth",
+            "/api/v1/category",
+            "/reg"
+    };
     private final AccessConfig accessConfig;
     private final CustomSecurityProvider securityProvider;
-
-    private static final String LOGIN_ENDPOINT = "/api/v1/user/auth";
 
     @Bean
     @Override
@@ -54,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers(LOGIN_ENDPOINT).permitAll();
+                .authorizeRequests().antMatchers(OPEN_APIs).permitAll();
 
         for (AccessConfig.Access access : accessConfig.getAccess()) {
             for (AccessConfig.Permit permit : access.getPermit()) {

@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import r2.llc.communal.model.data.EntityMapper;
+import r2.llc.communal.model.data.RegModel;
+import r2.llc.communal.model.data.SingleMapper;
 import r2.llc.communal.model.data.UserModel;
 import r2.llc.communal.model.entity.UserEntity;
 import r2.llc.communal.model.repository.UserRepository;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final EntityMapper<UserModel, UserEntity> userMapper;
+    private final SingleMapper<RegModel, UserEntity> regMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository repository;
 
@@ -37,9 +40,9 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    public UserModel save(UserModel userModel) {
-        UserEntity entity = userMapper.mapTR(userModel);
-        UserEntity result = repository.save(entity);
+    public UserModel save(RegModel regModel) {
+        UserEntity user = regMapper.map(regModel);
+        UserEntity result = repository.save(user);
         return userMapper.mapRT(result);
     }
 

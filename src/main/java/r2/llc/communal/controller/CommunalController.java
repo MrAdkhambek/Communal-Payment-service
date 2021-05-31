@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import r2.llc.communal.model.data.Communal;
 import r2.llc.communal.model.service.CommunalService;
 import r2.llc.communal.util.ResponseUtil;
 

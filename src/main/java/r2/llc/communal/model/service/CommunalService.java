@@ -48,9 +48,12 @@ public class CommunalService {
 
     public Communal deleteById(Long id) {
         try {
-            CommunalEntity result = repository.getById(id);
-            repository.deleteById(id);
-            return communalMapper.mapRT(result);
+            return repository.findById(id)
+                    .map(communalEntity -> {
+                        repository.delete(communalEntity);
+                        return communalEntity;
+                    }).map(communalMapper::mapRT)
+                    .orElseThrow();
         } catch (Exception e) {
             log.error("Error deleteById Communal", e);
             throw e;

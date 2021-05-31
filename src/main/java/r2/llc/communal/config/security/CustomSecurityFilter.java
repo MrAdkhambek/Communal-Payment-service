@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import r2.llc.communal.config.SecurityConfig;
 import r2.llc.communal.util.ErrorAPI;
 
 import javax.servlet.FilterChain;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
+import java.util.Arrays;
 
 import static java.util.Objects.requireNonNull;
 
@@ -25,8 +26,6 @@ import static java.util.Objects.requireNonNull;
 public class CustomSecurityFilter extends OncePerRequestFilter {
 
     private final CustomSecurityProvider securityProvider;
-
-    List<String> withoutToken = List.of("/api/v1/user/auth");
 
     public CustomSecurityFilter(CustomSecurityProvider securityProvider) {
         this.securityProvider = securityProvider;
@@ -45,7 +44,7 @@ public class CustomSecurityFilter extends OncePerRequestFilter {
         String token = this.securityProvider.resolveToken(request);
 
         try {
-            if (!withoutToken.contains(URI)) {
+            if (!Arrays.asList(SecurityConfig.OPEN_APIs).contains(URI) && !URI.startsWith("/actuator")) {
                 Authentication auth = this.securityProvider.getAuthentication(requireNonNull(token));
                 SecurityContextHolder.getContext().setAuthentication(requireNonNull(auth));
             }
