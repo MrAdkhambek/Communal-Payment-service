@@ -41,6 +41,18 @@ services:
         aliases:
           - http_app
 
+  app_ui:
+    container_name: communal-ui
+    build: ui/
+    ports:
+      - 8081:8080
+    depends_on:
+      - http_app
+    networks:
+      monitoring:
+        aliases:
+          - app_ui
+
   grafana:
     build: './config/grafana'
     container_name: grafana
