@@ -188,6 +188,39 @@ public class Mappers {
     }
 
     @Bean
+    public EntityMapper<ReceiptModel, ReceiptEntity> receiptMapper() {
+        return new EntityMapper<ReceiptModel, ReceiptEntity>() {
+            @Override
+            public ReceiptModel mapRT(ReceiptEntity from) {
+                return ReceiptModel
+                        .builder()
+                        .id(from.getId())
+                        .summa(from.getSumma())
+                        .districtId(from.getDistrictId())
+                        .cardExpire(from.getCardExpire())
+                        .cardNumber(from.getCardNumber())
+                        .communalId(from.getCommunalId())
+                        .phoneNumber(from.getPhoneNumber())
+                        .createdAt(from.getCreatedAt())
+                        .build();
+            }
+
+            @Override
+            public ReceiptEntity mapTR(ReceiptModel from) {
+                final var entity = new ReceiptEntity();
+                entity.setId(from.getId());
+                entity.setSumma(from.getSumma());
+                entity.setDistrictId(from.getDistrictId());
+                entity.setCardExpire(from.getCardExpire());
+                entity.setCardNumber(from.getCardNumber());
+                entity.setCommunalId(from.getCommunalId());
+                entity.setPhoneNumber(from.getPhoneNumber());
+                return entity;
+            }
+        };
+    }
+
+    @Bean
     public SingleMapper<RegModel, UserEntity> regMapper(PasswordEncoder passwordEncoder) {
         return value -> {
             UserEntity entity = new UserEntity();

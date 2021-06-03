@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/actuator/*",
             "/api/v1/user/auth",
             "/api/v1/category",
-            "/reg"
+            "/reg",
+            "api/v1/payment/pay"
     };
     private final AccessConfig accessConfig;
     private final CustomSecurityProvider securityProvider;

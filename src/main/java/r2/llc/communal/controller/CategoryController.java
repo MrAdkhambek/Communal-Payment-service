@@ -22,7 +22,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    @ApiOperation(value = "Get All Category items", authorizations = {@Authorization("Authorization")}, produces = "application/json")
+    @ApiOperation(value = "Get All Category items", produces = "application/json")
     public ResponseEntity<?> getAll() {
         return ResponseUtil.of(categoryService::getAll);
     }
